@@ -28,3 +28,9 @@ Mi-am definit task-urile:
     *optiunea primirii unui nume de director ce contine fisiere de input pentru a fi testate
         (aici scriptul nu o sa mai primeasca parametrii , ci utilizatorul va introduce doar numele aplicatiei fara argumente , urmand ca argumentele sa le preia din fisiere)
 
+# 19.06.2024
+-Am inceput implementarea functiilor si testarea acestora
+-Am rezolvat problema cu utilitarul ltrace
+-Am stabilit ca separator virgula in cadrul fisierului .csv(la deschiderea acestuia e important)
+-Am aflat de comanda shift si am folosit-o pentru a "shifta" la stanga parametrii pozitionali ai scriptului
+-Voi afisa in .csv doar denumirile apelurilor de sistem,de biblioteca, nu si detaliile acestora
