@@ -7,7 +7,7 @@ Script pentru testarea unei aplicații(timp de execuție, input-output, apeluri 
     Din nou!
 
 # 18.06.2024
-Mi-am definit task-urile:
+Mi-am definit task-urile de inceput:
 -Scriptul primeste parametri, astfel:
     Primul parametru -> numele aplicatiei
     Restul -> parametrii aplicatiei
@@ -26,7 +26,7 @@ Mi-am definit task-urile:
 -Scriptul va fi interactiv, in sensul ca va interoga cu privire la:
     *append sau nu in fisiere
     *optiunea primirii unui nume de director ce contine fisiere de input pentru a fi testate
-        (aici scriptul nu o sa mai primeasca parametrii , ci utilizatorul va introduce doar numele aplicatiei fara argumente , urmand ca argumentele sa le preia din fisiere)
+        (aici scriptul nu o sa mai primeasca parametrii , ci utilizatorul va introduce doar numele aplicatiei fara argumente, urmand ca argumentele sa le preia din fisiere)
 
 # 19.06.2024
 -Am inceput implementarea functiilor si testarea acestora
@@ -34,3 +34,10 @@ Mi-am definit task-urile:
 -Am stabilit ca separator virgula in cadrul fisierului .csv(la deschiderea acestuia e important)
 -Am aflat de comanda shift si am folosit-o pentru a "shifta" la stanga parametrii pozitionali ai scriptului
 -Voi afisa in .csv doar denumirile apelurilor de sistem,de biblioteca, nu si detaliile acestora
+
+# 20.06.2024
+-Adaugare campuri in .csv referitoare la numarul apelurilor de sistem/biblioteca (distincte si nu)
+-Implementare functie de interogare user cu privire la deschiderea fisierului .csv dupa rularea scriptului
+-Implementare functie de interogare cu privirea la deschiderea vreunuia dintre fisierele de testare
+-Modularizare script (organizarea pe functii + definire flow)
+-Implementare functie de generare a unei diagrame a apelurilor
