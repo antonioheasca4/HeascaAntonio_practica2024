@@ -41,3 +41,9 @@ Mi-am definit task-urile de inceput:
 -Implementare functie de interogare cu privirea la deschiderea vreunuia dintre fisierele de testare
 -Modularizare script (organizarea pe functii + definire flow)
 -Implementare functie de generare a unei diagrame a apelurilor
+
+# 21.06.2024
+-Implementare functionalitate de "checker"
+    * user-ul poate introduce numele a 2 directoare: unul ce contine fisiere de input si altul ce contine fisiere de output
+    * scriptul executa aplicatia pe rand cu fiecare input si compara ceea ce obtine cu ceea ce se afla in fisierul de output aferent
+    * se furnizeaza un procentaj de corectitudine

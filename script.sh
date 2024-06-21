@@ -114,7 +114,7 @@ query_user()
             fi
         done
     else
-        local app_name=$1
+        app_name=$1
         shift 
         local arg=$@
 
@@ -234,11 +234,91 @@ EOF
     rm data* 
 }
 
+checker()
+{
+    echo "Doriti sa utilizati optiunea de checker,furnizand 2 nume de directore(unul cu inputuri si unul cu outputurile aferente)?(da/nu)"
+    read choice
+
+    if [[ ! "$choice" = "da" ]] ; then
+        return
+    fi 
+
+    echo "Introduceti directorul de inputuri"
+    read in_dir
+
+    echo "Introduceti directorul de outputuri"
+    read out_dir   
+    
+    if [[ ! -d "$in_dir" || ! -d "$out_dir" ]]; then
+        echo "Director/Directoare incorecte"
+        return
+    fi
+
+    #preiau fisierele
+
+    files_in="$in_dir"/*
+    files_out=$(ls $out_dir)
+
+    #adaug fisierele de out intr un fisier temporar
+    local tmp="out.txt"
+    echo "$files_out" | tr "\t" "\n" > $tmp
+
+
+
+    # verific nr de fisiere sa fie identic
+    if [[ ${#files_in[@]} -ne ${#files_out[@]} ]]; then
+        echo "Directoarele nu au acelasi numar de fisiere!"
+        return
+    fi
+
+    local corect=0
+    local contor=1
+    
+    for file_in in $files_in; do
+
+        file_out_aux=$(cat $tmp | head -n $contor | tail -n 1)
+        file_out="$out_dir/$file_out_aux"
+
+        if [[ ! -f "$file_in" || ! -f "$file_out" ]]; then
+            echo "Unul din fisiere nu este regulat!"
+            exit 1
+        fi
+
+        #fisier folosit pt outputul executiei aplicatiei
+        local aux_file="temp.txt"
+
+        local input=$(cat $file_in)
+        $app_name $input > $aux_file
+        
+        
+        local var=$(diff -q --line-format=%l "$file_out" "$aux_file")
+        if [[ -n $var ]] ; then
+            echo "Fisierul $file_out nu contine outputul corect aferent inputului din fisierul $file_in!"
+        else
+            let corect++
+        fi
+
+        let contor++
+    done  
+    
+    let contor=contor-1
+    echo $corect
+    echo $contor
+    echo "Procentajul de corectitudine al fisierelor de output este:"
+    bc<<<"scale=2;$corect.0/$contor.0 * 100.0"
+
+    #sterg fisierele temporare 
+    rm $tmp
+    rm $aux_file
+}
+
+
 flow_of_script()
 {
     query_open_csv
     open_files
     generate_chart_of_calls
+    checker
 }
 
 
