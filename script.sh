@@ -9,11 +9,16 @@ OK_CSV=0
 # Functie pentru masurarea timpului de executie, output-ului, apelurilor de sistem si de biblioteca
 collect_metrics() 
 {
-    /usr/bin/time -f "%e" "$@" > output.txt 2> time.txt
+    { time "$@"; } > output.txt 2> time_output.txt
+    cat time_output.txt | tail -n 3 | head -n 1 | cut -d'l' -f2 | tr "\n" " " | tr "," "." | sed "s/\t//" > time.txt
+
     strace -o strace_output.txt "$@" > /dev/null
+
     ltrace -o ltrace_output.txt "$@" > /dev/null
+
+
     local execution_time=$(cat time.txt)
-    local output=$(cat output.txt)
+    local output=$(cat output.txt | tr "\n" ";")
     local sys_calls=$(cat strace_output.txt)
     local lib_calls=$(cat ltrace_output.txt | head -n -1)
 
@@ -30,7 +35,9 @@ collect_metrics()
     local nr_lib=$(echo "$lib_calls" | egrep -o "^.+\(" | egrep -o "^[^ ]+" | egrep -o "^[^(]+" | wc -l)
 
     echo "$execution_time|$output|$var_sys|$var_lib|$nr_sys_dis|$nr_lib_dis|$nr_sys|$nr_lib" 
+    rm time_output.txt
 }
+
 
 # Functie pentru creare fisier .csv
 create_csv() 
@@ -60,14 +67,6 @@ append_csv()
 query_user() 
 {
     if [ "$dir_choice" = "da" ]; then
-        echo "Introduceti numele aplicatiei:"
-        read app_name
-
-            if [[ ! -x $app_name ]] ; then
-                echo "$app_name nu e executabil..."
-                exit 1
-            fi   
-
         echo "Introduceti numele directorului ce contine fisierele de input:"
         read input_dir
 
@@ -135,7 +134,6 @@ query_user()
             OK_CSV=1
         fi
 
-    
         metrics=$(collect_metrics "$app_name" $arg)
         if [[ "$create_csv_choice" = "da" || "$create_csv_choice" = "1" ]]; then
                 local execution_time=$(echo "$metrics" | cut -d'|' -f1)
@@ -163,7 +161,7 @@ open_libreoffice()
     read open_choice
 
     if [[ "$open_choice" = "da" ]] ; then
-        libreoffice --calc "$csv_file"
+        libreoffice --calc "$csv_file"    
     fi   
 }
 
@@ -324,7 +322,8 @@ flow_of_script()
 
 # De aici incepe scriptul (distractia)
 # Start script
-    if [ $# -lt 1 ]; then
+if [[ "$1" = "-d" ]]; then
+        app_name=$2
         echo "Doriti sa furnizati un nume de director ce contine fisiere de input? (da/nu)"
         read dir_choice
         if [[ "$dir_choice" = "nu" ]] ; then
@@ -332,10 +331,14 @@ flow_of_script()
             exit 1
         fi    
         query_user # userul nu introduce argumente pentru ca doreste furnizarea unui director cu fisierele de input
-    else
-        app_name=$1
+elif [[ "$1" = "-a" ]] ; then
+        app_name=$2
+        shift
         shift
         args=$@       
         query_user "$app_name" "$args"
-    fi
+else 
+    echo "Optiune invalida.EXIT..."
+    exit 1        
+fi
 flow_of_script

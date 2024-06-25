@@ -47,3 +47,11 @@ Mi-am definit task-urile de inceput:
     * user-ul poate introduce numele a 2 directoare: unul ce contine fisiere de input si altul ce contine fisiere de output
     * scriptul executa aplicatia pe rand cu fiecare input si compara ceea ce obtine cu ceea ce se afla in fisierul de output aferent
     * se furnizeaza un procentaj de corectitudine
+
+# 25.06.2024
+- Verificare functionalitati pe mai multe aplicatii
+- ';' in loc de '\n' in fisierul .csv (pentru output)
+- Am modificat politica de apelare a scriptului:
+    * cu optiunea -d se furnizeaza ca parametri doar numele aplicatiei , urmand a se furniza si un director cu fisiere de input
+    * cu optiunea -a se furnizeaza ca parametri numele aplicatiei si argumentele acesteia
+- Modificare modul collect_metrics (pentru a prelua timpul de executie mai precis,utilizand keyword-ul time)
