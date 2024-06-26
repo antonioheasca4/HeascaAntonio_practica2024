@@ -311,6 +311,64 @@ checker()
 }
 
 
+analyze_code() 
+{
+    echo "Doriti furnizarea fisierului sursa pentru analiza codului?(da/nu)"
+    read choice
+
+    if [[ ! "$choice" = "da" ]] ; then
+        return
+    fi    
+
+    echo "Introduceti numele fisierului sursa"
+    read source_code
+
+
+    #tipuri de date
+    local nr_tip=$(egrep -o '\b(int|float|double|char|long|short|unsigned|const)\s+\w+' "$source_code" | wc -l)
+    
+    local int_tip=$(egrep -o '\bint\s+\w+' "$source_code" | wc -l)
+    local float_tip=$(egrep -o '\bfloat\s+\w+' "$source_code" | wc -l)
+    local double_tip=$(egrep -o '\bdouble\s+\w+' "$source_code" | wc -l)
+    local char_tip=$(egrep -o '\bchar\s+\w+' "$source_code" | wc -l)
+    local long_tip=$(egrep -o '\blong\s+\w+' "$source_code" | wc -l)
+    local short_tip=$(egrep -o '\bshort\s+\w+' "$source_code" | wc -l)
+    local unsigned_tip=$(egrep -o '\bunsigned\s+\w+' "$source_code" | wc -l)
+    local const_tip=$(egrep -o '\bconst\s+\w+' "$source_code" | wc -l)
+
+    #structuri repetitive
+    local nr_for=$(egrep -o '\bfor\s*\(.*\)' "$source_code" | wc -l)
+    local nr_while=$(egrep -o '\bwhile\s*\(.*\)' "$source_code" | wc -l)
+    local nr_do_while=$(egrep -o '\bdo\s*{?' "$source_code" | wc -l)
+
+    #posibile functii generatoare de bug-uri (warnings)
+    local possible_warnings=$(egrep -n '(printf|scanf|gets|strcpy|strcat)' "$source_code")
+
+    echo "Analiza codului din fișierul $source_code:"
+    echo "Numar total de variabile: $nr_tip"
+    echo "  - int: $int_tip"
+    echo "  - float: $float_tip"
+    echo "  - double: $double_tip"
+    echo "  - char: $char_tip"
+    echo "  - long: $long_tip"
+    echo "  - short: $short_tip"
+    echo "  - unsigned: $unsigned_tip"
+    echo "  - const: $const_tip"
+    echo
+    echo "Structuri repetitive:"
+    echo "  - for: $nr_for"
+    echo "  - while: $nr_while"
+    echo "  - do-while: $nr_do_while"
+    echo
+    echo "Posibile functii generatoare de bug-uri (warnings):"
+    if [[ -z "$possible_warnings" ]]; then
+        echo "  - Nicio problema detectata"
+    else
+        echo "$possible_warnings"
+    fi
+}
+
+
 flow_of_script()
 {
     query_open_csv
@@ -337,6 +395,9 @@ elif [[ "$1" = "-a" ]] ; then
         shift
         args=$@       
         query_user "$app_name" "$args"
+elif [[ "$1" = "-t" ]] ; then
+    analyze_code   
+    exit 0     
 else 
     echo "Optiune invalida.EXIT..."
     exit 1        

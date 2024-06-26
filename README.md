@@ -55,3 +55,9 @@ Mi-am definit task-urile de inceput:
     * cu optiunea -d se furnizeaza ca parametri doar numele aplicatiei , urmand a se furniza si un director cu fisiere de input
     * cu optiunea -a se furnizeaza ca parametri numele aplicatiei si argumentele acesteia
 - Modificare modul collect_metrics (pentru a prelua timpul de executie mai precis,utilizand keyword-ul time)
+
+# 26.06.2024
+- Implementare functionalitate de analiza codului sursa (tipuri de date,structuri repetitive,posibile bug-uri)
+- Testare functionalitate
+- Utilizatorul va folosi optiunea -t fara alt paramatru atunci cand va rula scriptul
+- Documenatare top 5 functii generatoare de bug-uri
